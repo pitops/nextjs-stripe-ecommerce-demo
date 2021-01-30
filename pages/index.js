@@ -1,25 +1,24 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-
 import products from "../products.json";
-import { initiateCheckout } from "../lib/payments";
+import { useCart } from "../hooks/use-cart";
+import Link from "next/link";
 
 export default function Home() {
+  const { quantity, subtotal, addToCart, checkout } = useCart();
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Space Jelly Shop</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h1 className={styles.title}>Space Jelly Shop</h1>
 
         <p className={styles.description}>
-          Get started by editing{" "}
-          <code className={styles.code}>pages/index.js</code>
+          The best space jellyfish swag in the universe
         </p>
 
         <ul className={styles.grid}>
@@ -27,21 +26,21 @@ export default function Home() {
             const { id, title, price, image, description } = product;
             return (
               <li className={styles.card} key={id}>
-                <a href="#">
-                  <img src={image} alt={title} />
-                  <h3>{title}</h3>
-                  <p>${price}</p>
-                  <p>{description}</p>
-                </a>
+                <Link href={`products/${id}`}>
+                  <a>
+                    <img src={image} alt={title} />
+                    <h3>{title}</h3>
+                    <p>${price}</p>
+                    <p>{description}</p>
+                  </a>
+                </Link>
                 <p>
-                  <button className={styles.button} onClick={_ => initiateCheckout({
-                    lineItems: [
-                      {
-                        price: id,
-                        quantity: 1
-                      }
-                    ]
-                  })}>Buy Now</button>
+                  <button
+                    className={styles.button}
+                    onClick={(_) => addToCart({ id })}
+                  >
+                    Add to cart
+                  </button>
                 </p>
               </li>
             );
